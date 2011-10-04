@@ -13,7 +13,7 @@ module Faraday
       def on_complete(env)
         begin
           env[:body] = ::MultiJson.decode(env[:body])
-        rescue JSON::ParserError
+        rescue MultiJson::ParserError
           env[:body] = nil
         end
       end

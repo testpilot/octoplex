@@ -1,8 +1,12 @@
 require "octoplex/version"
+require "cgi"
+require "hashr"
+require "octoplex/errors"
 
 module Octoplex
   autoload :Connection, 'octoplex/connection'
   autoload :Client,     'octoplex/client'
+  autoload :API,        'octoplex/api'
 
   class << self
     # A global instance of the Client class
@@ -27,5 +31,16 @@ module Octoplex
       end
     end
 
+    # Delegate missing API calls to client, so we can do things like:
+    # Octoplex.users('octocat')
+    # Octoplex.user
+    # Octoplex.repos('octocat')
+    def method_missing(meth, *args, &blk)
+      if client.respond_to?(meth)
+        client.send(meth, *args, &blk)
+      else
+        super
+      end
+    end
   end
 end

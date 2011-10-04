@@ -1,5 +1,7 @@
 require "faraday"
 require "faraday/response/multi_json"
+require "faraday/response/hashr"
+require "faraday/response/raise_octoplex_error"
 
 module Octoplex
   class Connection
@@ -17,6 +19,8 @@ module Octoplex
         builder.use Faraday::Request::JSON
         builder.use Faraday::Response::Logger
         builder.use Faraday::Adapter::NetHttp
+        builder.use Faraday::Response::Hashr
+        builder.use Faraday::Response::RaiseOctoplexError
         builder.use Faraday::Response::MultiJson
       end
     end
