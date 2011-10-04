@@ -43,9 +43,8 @@ describe Octoplex::Connection do
     conn.post('/user/keys/123', {:key => 'ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA2'}).values.should == user_key.values
   end
 
-  it "should return the globally set token" do
-    Octoplex.token = '1234'
-    conn = Octoplex::Connection.new
+  it "should return accept token as first argument" do
+    conn = Octoplex::Connection.new('1234')
     conn.token.should == '1234'
   end
 end

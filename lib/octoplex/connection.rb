@@ -3,14 +3,12 @@ require "faraday/response/multi_json"
 
 module Octoplex
   class Connection
-    def initialize
+
+    attr_reader :conn, :token
+
+    def initialize(token = nil)
+      @token = token
       setup
-    end
-
-    attr_reader :conn
-
-    def token
-      Octoplex.token
     end
 
     def setup
@@ -48,7 +46,7 @@ module Octoplex
       response = conn.send(method) do |req|
         req.url(path)
         req.body = body unless body.nil?
-        req.params['access_token'] = token if token.is_a?(String)
+        req.params['access_token'] = self.token if self.token.is_a?(String)
       end
       response.body
     end

@@ -2,9 +2,17 @@ require "octoplex/version"
 
 module Octoplex
   autoload :Connection, 'octoplex/connection'
+  autoload :Client,     'octoplex/client'
 
   class << self
-    attr_accessor :token
+    # A global instance of the Client class
+    #
+    # Options:
+    #   :token - The OAuth token you have retrieved earlier.
+    #
+    def client(options = {})
+      @client ||= Octoplex::Client.new(options)
+    end
 
     # @private
     def log
@@ -15,9 +23,5 @@ module Octoplex
       end
     end
 
-    def connection
-      @connection ||= Octoplex::Connection.new
-    end
   end
-
 end
