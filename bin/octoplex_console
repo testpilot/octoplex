@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+require "rubygems"
+require 'irb'
+require 'irb/completion'
+require "bundler"
+Bundler.setup
+
+$: << 'lib'
+
+require "awesome_print"
+require "octoplex"
+
+IRB.start
