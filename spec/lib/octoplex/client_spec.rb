@@ -32,4 +32,26 @@ describe Octoplex::Client do
       Octoplex.client.rate_limit_remaining.should == 4999
     end
   end
+
+  describe "API methods" do
+    it "should delegate #get to connection" do
+      Octoplex::Connection.any_instance.expects(:get).once.with('/user/keys')
+      Octoplex.client.get('/user/keys')
+    end
+
+    it "should delegate #post to connection" do
+      Octoplex::Connection.any_instance.expects(:post).once.with('/user/keys', {:key => '1233'})
+      Octoplex.client.post('/user/keys', {:key => '1233'})
+    end
+
+    it "should delegate #put to connection" do
+      Octoplex::Connection.any_instance.expects(:put).once.with('/user/keys', {:key => '1233'})
+      Octoplex.client.put('/user/keys', {:key => '1233'})
+    end
+
+    it "should delegate #delete to connection" do
+      Octoplex::Connection.any_instance.expects(:delete).once.with('/user/keys')
+      Octoplex.client.delete('/user/keys')
+    end
+  end
 end
