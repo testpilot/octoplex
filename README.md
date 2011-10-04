@@ -5,7 +5,7 @@ A lightweight wrapper around Github's v3 API
 ## Installation
 
 ``` ruby
-    gem 'octoplex'
+gem 'octoplex'
 ```
 
 ## Usage
@@ -18,26 +18,26 @@ acquired an OAuth token from another service, e.g. using Omniauth and Devise.
 Initialize the client with an auth token:
 
 ``` ruby
-    Octoplex.client(:token => "OAUTH_TOKEN")
+Octoplex.client(:token => "OAUTH_TOKEN")
 ```
 
 Request this users details:
 
 ``` ruby
-    Octoplex.user
+Octoplex.user
 ```
 
 Request a specific users details:
 
 ``` ruby
-    Octoplex.users('ivanvanderbyl')
+Octoplex.users('ivanvanderbyl')
 ```
 
 Alternatively you can use `Octoplex` as a connection wrapper for the API:
 
 ``` ruby
-    Octoplex.get('/user')
-    Octoplex.get('/user/repos')
+Octoplex.get('/user')
+Octoplex.get('/user/repos')
 ```
     
 All requests return a `Hashr` object or `Array` of `Hashr` objects
@@ -46,7 +46,6 @@ All requests on the new v3 API are rate limited, to find out your current usage 
 these two methods after each request:
 
 ``` ruby
-    Octoplex.rate_limit #=> 5000
-    Octoplex.rate_limit_remaining #=> 4999
-    
+Octoplex.rate_limit #=> 5000
+Octoplex.rate_limit_remaining #=> 4999
 ```
