@@ -25,4 +25,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "multi_json"
   s.add_runtime_dependency "yajl-ruby"
   s.add_runtime_dependency "hashr"
+  s.add_runtime_dependency "link_header", "0.0.5"
 end
