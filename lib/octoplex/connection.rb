@@ -8,6 +8,7 @@ module Octoplex
 
     def initialize(token = nil)
       @token = token
+      @rate_limit = @rate_limit_remaining = 0
       setup
     end
 

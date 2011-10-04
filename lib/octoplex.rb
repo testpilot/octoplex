@@ -14,6 +14,10 @@ module Octoplex
       @client ||= Octoplex::Client.new(options)
     end
 
+    def discard_client!
+      @client = nil
+    end
+
     # @private
     def log
       @log ||= begin
