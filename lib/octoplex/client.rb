@@ -1,6 +1,8 @@
 module Octoplex
   class Client
 
+    include Octoplex::API::Root
+
     attr_accessor :token
 
     def initialize(options = nil)
