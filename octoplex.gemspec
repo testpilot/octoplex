@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "rspec"
   s.add_development_dependency "mocha"
+  s.add_development_dependency "awesome_print"
 
   s.add_runtime_dependency "faraday"
   s.add_runtime_dependency "multi_json"
