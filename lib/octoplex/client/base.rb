@@ -1,5 +1,5 @@
 module Octoplex
-  module API
+  class Client
     class Base < Hashr
 
       attr_reader :client

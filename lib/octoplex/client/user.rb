@@ -1,6 +1,6 @@
 module Octoplex
-  module API
-    class User < Base
+  class Client
+    class Users < Base
 
 
 

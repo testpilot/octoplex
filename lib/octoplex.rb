@@ -6,7 +6,6 @@ require "octoplex/errors"
 module Octoplex
   autoload :Connection, 'octoplex/connection'
   autoload :Client,     'octoplex/client'
-  autoload :API,        'octoplex/api'
 
   class << self
     # A global instance of the Client class

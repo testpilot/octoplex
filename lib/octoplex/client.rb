@@ -1,22 +1,21 @@
 module Octoplex
   class Client
 
-    include Octoplex::API::Root
+    autoload :Root,       'octoplex/client/root'
+    autoload :Base,       'octoplex/client/base'
+    autoload :User,       'octoplex/client/user'
+    autoload :Repository, 'octoplex/client/repository'
 
-    attr_accessor :token
+    include Octoplex::Client::Root
+
+    attr_accessor :options
 
     def initialize(options = nil)
-      options ||= {}
-
-      options = {
-        :token => nil
-      }.update(options)
-
-      @token = options.delete(:token)
+      @options = options
     end
 
     def connection
-      @connection ||= Octoplex::Connection.new(token)
+      @connection ||= Octoplex::Connection.new(options)
     end
 
     # The maximum number of API requests you can do this hour

@@ -1,5 +1,5 @@
 module Octoplex
-  module API
+  class Client
     class Repository < Base
 
       attr_reader :owner

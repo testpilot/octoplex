@@ -1,5 +1,5 @@
 module Octoplex
-  module API
+  class Client
     module Root
 
       # GET /users/:user
