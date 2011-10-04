@@ -4,7 +4,7 @@ require "faraday/response/multi_json"
 module Octoplex
   class Connection
 
-    attr_reader :conn, :token
+    attr_reader :conn, :token, :rate_limit, :rate_limit_remaining
 
     def initialize(token = nil)
       @token = token
@@ -48,6 +48,12 @@ module Octoplex
         req.body = body unless body.nil?
         req.params['access_token'] = self.token if self.token.is_a?(String)
       end
+
+      if response.env[:response_headers].has_key?('x-ratelimit-limit')
+        @rate_limit           = response.env[:response_headers]['x-ratelimit-limit'].to_i
+        @rate_limit_remaining = response.env[:response_headers]['x-ratelimit-remaining'].to_i
+      end
+
       response.body
     end
 
