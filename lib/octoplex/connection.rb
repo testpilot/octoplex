@@ -6,10 +6,17 @@ require "faraday/response/raise_octoplex_error"
 module Octoplex
   class Connection
 
-    attr_reader :conn, :token, :rate_limit, :rate_limit_remaining
+    attr_reader :conn, :options, :token, :rate_limit, :rate_limit_remaining
 
-    def initialize(token = nil)
-      @token = token
+    def initialize(options = {})
+      options ||= {}
+
+      @options = {
+        :token => nil,
+        :per_page => 100
+      }.update(options)
+
+      @token = options.delete(:token)
       @rate_limit = @rate_limit_remaining = 0
       setup
     end
@@ -49,7 +56,7 @@ module Octoplex
 
     def request(path, method = :get, body = nil)
       response = conn.send(method) do |req|
-        req.url(path)
+        req.url(path, options)
         req.body = body unless body.nil?
         req.params['access_token'] = self.token if self.token.is_a?(String)
       end
