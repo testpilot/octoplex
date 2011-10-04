@@ -6,9 +6,13 @@ module Faraday
 
       def on_complete(env)
         begin
-          env[:body] = ::Hashr.new(env[:body])
+          if env[:body].is_a?(Array)
+            env[:body] = env[:body].map { |o| ::Hashr.new(o) }
+          else
+            env[:body] = ::Hashr.new(env[:body])
+          end
         rescue
-          env[:body] = nil
+          env[:body] = env[:body]
         end
       end
 
