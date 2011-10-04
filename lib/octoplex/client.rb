@@ -28,7 +28,23 @@ module Octoplex
       connection.rate_limit_remaining
     end
 
+    # API Helper methods
 
+    def get(path)
+      connection.get(path)
+    end
+
+    def post(path, body)
+      connection.post(path, body)
+    end
+
+    def put(path, body)
+      connection.put(path, body)
+    end
+
+    def delete(path)
+      connection.delete(path)
+    end
 
   end
 end
