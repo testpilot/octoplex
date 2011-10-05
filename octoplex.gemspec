@@ -7,7 +7,8 @@ Gem::Specification.new do |s|
   s.version     = Octoplex::VERSION
   s.authors     = ["Ivan Vanderbyl"]
   s.email       = ["ivanvanderbyl@me.com"]
-  s.homepage    = "http://testpilot.me/testpilot/octoplex"
+  # s.homepage    = "http://testpilot.me/testpilot/octoplex"
+  s.homepage    = "http://github.com/testpilot/octoplex"
   s.summary     = %q{A lightweight wrapper around the Github v3 API}
   s.description = %q{A lightweight wrapper around the Github v3 API}
 
