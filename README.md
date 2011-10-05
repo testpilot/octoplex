@@ -56,6 +56,17 @@ Octoplex.rate_limit #=> 5000
 Octoplex.rate_limit_remaining #=> 4999
 ```
 
+There are time when you may want to run multiple instances of the `Octoplex::Client` side by side
+with different tokens.
+
+The recommended approach for this is to not use the global `Octoplex` object, rather instantiate `Octoplex::Client`
+individually.
+
+``` ruby
+client = Octoplex::Client.new(:token => "AUTH_TOKEN")
+client.get('/user')
+```
+
 ### Language note
 
 This library is written in International English, so if you're wondering why we've swapped your Zs for S, and added a U to colour – get a dictionary.
