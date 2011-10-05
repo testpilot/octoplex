@@ -36,7 +36,8 @@ Octoplex.users('ivanvanderbyl')
 ```
 
 All client methods are designed to match closely to the [Github v3 API](http://developer.github.com/v3/users/) REST methods.
-So calling `Octoplex.user` will make an API call equivalent to `GET /user`
+
+Example: Calling `Octoplex.user` will make an API call equivalent to `GET /user`
 
 Alternatively you can use `Octoplex` as a connection wrapper for the API:
 
