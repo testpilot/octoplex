@@ -56,7 +56,7 @@ Octoplex.rate_limit #=> 5000
 Octoplex.rate_limit_remaining #=> 4999
 ```
 
-There are time when you may want to run multiple instances of the `Octoplex::Client` side by side
+There are times when you may want to run multiple instances of the `Octoplex::Client` side by side
 with different tokens.
 
 The recommended approach for this is to not use the global `Octoplex` object, rather instantiate `Octoplex::Client`
@@ -66,6 +66,21 @@ individually.
 client = Octoplex::Client.new(:token => "AUTH_TOKEN")
 client.get('/user')
 ```
+
+### Configuration
+
+You can specify a number of connection options before making your first request, but remember, the connection object is cached so you will
+need to call `Octoplex.discard_client!` if you want to change anything.
+
+Available options:
+``` ruby
+{
+  :token => YOU OAUTH AUTHENTICATION TOKEN, Default: nil,
+  :per_page => THE NUMBER OF ITEMS TO REQUEST AT ONCE, Default: 100,
+  :enable_caching, ENABLE REQUEST CACHING, Default: true
+}
+```
+Pass these to `Octoplex.client(options)`
 
 ### Language note
 

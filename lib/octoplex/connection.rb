@@ -13,7 +13,9 @@ module Octoplex
 
       @options = {
         :token => nil,
-        :per_page => 100
+        :per_page => 100,
+        :enable_caching => true,
+        :logging => false
       }.update(options)
 
       @token = options.delete(:token)
@@ -24,7 +26,7 @@ module Octoplex
     def setup
       @conn = Faraday.new(:url => 'https://api.github.com') do |builder|
         builder.use Faraday::Request::JSON
-        builder.use Faraday::Response::Logger
+        builder.use Faraday::Response::Logger if options[:logging].eql?(true)
         builder.use Faraday::Adapter::NetHttp
         builder.use Faraday::Response::Hashr
         builder.use Faraday::Response::RaiseOctoplexError
@@ -52,13 +54,46 @@ module Octoplex
       request(path, :delete)
     end
 
+    def cache(path, response)
+      if options[:enable_caching] == true
+        (@cache ||= {})[path.to_s] = response
+      end
+      response
+    end
+
+    def cached(path)
+      (@cache ||= {})[path.to_s]
+    end
+
+    def is_cached?(path)
+      (@cache ||= {}).has_key?(path)
+    end
+
+    def clear_cache
+      @cache = {}
+    end
+
+    def cache_size
+      (@cache ||= {}).keys.size
+    end
+
     private
 
     def request(path, method = :get, body = nil)
+      if is_cached?(path)
+        return cached(path)
+      end
+
+      data = make_request(path, method, body)
+      cache(path, data)
+    end
+
+    def make_request(path, method = :get, body = nil)
       response = conn.send(method) do |req|
-        req.url(path, options)
+        req.url(path)
         req.body = body unless body.nil?
         req.params['access_token'] = self.token if self.token.is_a?(String)
+        req.params['per_page'] = self.options[:per_page] if self.options.has_key?(:per_page)
       end
 
       if response.env[:response_headers].has_key?('x-ratelimit-limit')
@@ -70,5 +105,4 @@ module Octoplex
     end
 
   end
-
 end

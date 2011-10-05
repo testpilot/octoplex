@@ -24,6 +24,7 @@ describe Octoplex::Connection do
     test = Faraday.new do |builder|
       builder.adapter :test, c do |stub|
         stub.get('/user/keys') {[ 200, {}, user_keys_payload ]}
+        stub.get('/users/ivan/cloudist') {[ 200, {}, JSON.dump({:login => 'ivan'})]}
         stub.post('/user/keys/123') {[ 200, {}, JSON.dump(user_key) ]}
       end
 
@@ -44,7 +45,31 @@ describe Octoplex::Connection do
   end
 
   it "should return accept token as first argument" do
-    conn = Octoplex::Connection.new('1234')
+    conn = Octoplex::Connection.new(:token => '1234')
     conn.token.should == '1234'
+  end
+
+  describe "caching" do
+    it "should cache each request and it's response" do
+      conn = Octoplex::Connection.new(:token => '1234')
+      conn.expects(:cached).with('/users/ivan/cloudist').returns({'login' => 'ivan'}).once
+
+      conn.get('/users/ivan/cloudist').should == {'login' => 'ivan'}
+      # This second request should hit cache
+      # and avoid caching the resuult
+      conn.expects(:cache).with('/users/ivan/cloudist', {'login' => 'ivan'}).never
+      conn.get('/users/ivan/cloudist').should == {'login' => 'ivan'}
+    end
+
+    it "should not cache response if caching is disabled" do
+      conn = Octoplex::Connection.new(:token => '1234', :enable_caching => false)
+      conn.expects(:cached).with('/users/ivan/cloudist').never
+
+      conn.get('/users/ivan/cloudist').should == {'login' => 'ivan'}
+      # This second request should hit cache
+      # and avoid caching the resuult
+      conn.expects(:cache).with('/users/ivan/cloudist', {'login' => 'ivan'}).returns({'login' => 'ivan'}).once
+      conn.get('/users/ivan/cloudist').should == {'login' => 'ivan'}
+    end
   end
 end
