@@ -2,15 +2,6 @@ module Octoplex
   class Client
     class Repository < Base
 
-      attr_reader :owner
-
-      def initialize(owner, client, data)
-        super(client, data)
-        @owner = owner
-      end
-
-
-
       # GET /repos/:user/:repo
 
       # GET /repos/:user/:repo/contributors
