@@ -4,9 +4,11 @@
   - gem install bundler --no-ri --no-rdoc
   - bundle install --without development production
   - bundle exec rake db:migrate
-  - bundle exec rake
+  - bundle exec rake spec
 :deploy:
   :branch: master
   :commands: []
 :ruby_versions:
 - 1.9.2
+- 1.9.3.rc1
+- 1.8.7
