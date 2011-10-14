@@ -47,14 +47,31 @@ module Octoplex
       #   Octoplex.repo('ivanvanderbyl', 'cloudist')
       def repos(*user_and_repo)
         if user_and_repo.size == 2
+          # We've been supplied two arguments
           user = user_and_repo[0]
           repo = user_and_repo[1]
         elsif user_and_repo.first.is_a?(String) && !user_and_repo.first.index('/').nil?
-          user, repo = user_and_repo.first.split('/', 2)
+          # We've been supplied a string like "ivanvanderbyl/cloudist"
+          user, repo = user_and_repo[0].split('/', 2)
+        elsif user_and_repo.size == 1
+          # We've been supplied one argument, probably a username
+          user = user_and_repo[0]
+          repo = nil
         else
           raise ArgumentError, "Unknown arguments: #{user_and_repo.split(', ')}"
         end
-        Octoplex::Client::Repository.new(self, get("/repos/#{user}/#{repo}"))
+        if repo.nil?
+          path = "/users/#{user}/repos"
+        else
+          path = "/repos/#{user}/#{repo}"
+        end
+
+        data = get(path)
+        if data.is_a?(Array)
+          data.map { |o| Octoplex::Client::Repository.new(self, o) }
+        else
+          Octoplex::Client::Repository.new(self, data)
+        end
       end
 
       alias_method :repo, :repos

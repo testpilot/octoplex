@@ -82,6 +82,40 @@ Available options:
 ```
 Pass these to `Octoplex.client(options)`
 
+### Repositories
+
+Here is a quick rundown on using `Octoplex` to interact with Repositories.
+
+**List all for a user**
+``` ruby
+Octoplex.repos('ivanvanderbyl')
+# or, take the object orientated approach
+Octoplex.users('testpilot').repos
+```
+
+**List all for the current user**
+``` ruby
+Octoplex.repos
+# or
+Octoplex.user.repos
+```
+
+**Fetch a specific repo**
+``` ruby
+Octoplex.repo('ivanvanderbyl/cloudist')
+# or
+Octoplex.repo('ivanvanderbyl', 'cloudist')
+```
+
+**List all for an Organisation**
+``` ruby
+Octoplex.orgs('testpilot').repos
+# or
+Octoplex.repos('testpilot')
+```
+
+
+
 ### Language note
 
 This library is written in International English, so if you're wondering why we've swapped your Zs for S, and added a U to colour – get a dictionary.
