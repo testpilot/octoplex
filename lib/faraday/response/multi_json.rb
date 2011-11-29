@@ -11,7 +11,7 @@ module Faraday
       end
 
       def on_complete(env)
-        return true if response[:status].to_i == 204
+        return true if env[:status].to_i == 204
 
         begin
           env[:body] = ::MultiJson.decode(env[:body])
