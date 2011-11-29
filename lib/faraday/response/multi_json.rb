@@ -11,6 +11,8 @@ module Faraday
       end
 
       def on_complete(env)
+        return true if response[:method].to_s.upcase == 'DELETE'
+
         begin
           env[:body] = ::MultiJson.decode(env[:body])
         rescue MultiJson::ParserError
