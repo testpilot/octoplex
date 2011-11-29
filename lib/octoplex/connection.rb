@@ -6,7 +6,7 @@ require "faraday/response/raise_octoplex_error"
 module Octoplex
   class Connection
 
-    attr_reader :conn, :options, :token, :rate_limit, :rate_limit_remaining
+    attr_reader :conn, :options, :conn_options, :token, :rate_limit, :rate_limit_remaining
 
     def initialize(options = {})
       options ||= {}
@@ -14,10 +14,17 @@ module Octoplex
       @options = {
         :per_page => 100,
         :enable_caching => true,
-        :logging => false
+        :logging => false,
+        :token => nil
       }.update(options)
 
-      @token = options.delete(:token)
+      @conn_options = {
+        :logging => @options.delete(:logging),
+        :access_token => @options.delete(:token),
+        :enable_caching => @options.delete(:enable_caching)
+      }
+
+      @token = @conn_options[:access_token]
       @rate_limit = @rate_limit_remaining = 0
       setup
     end
@@ -25,7 +32,7 @@ module Octoplex
     def setup
       @conn = Faraday.new(:url => 'https://api.github.com') do |builder|
         builder.use Faraday::Request::JSON
-        builder.use Faraday::Response::Logger if options[:logging].eql?(true)
+        builder.use Faraday::Response::Logger if conn_options[:logging].eql?(true)
         builder.use Faraday::Adapter::NetHttp
         builder.use Faraday::Response::Hashr
         builder.use Faraday::Response::RaiseOctoplexError
@@ -91,10 +98,8 @@ module Octoplex
       response = conn.send(method) do |req|
         req.url(path)
         req.body = body unless body.nil?
-        req.params['access_token'] = self.token if self.token.is_a?(String)
-        if method == :get
-          req.params['per_page'] = self.options[:per_page] if self.options.has_key?(:per_page)
-        end
+        req.params.merge!(authentication_param) if self.token.is_a?(String)
+        req.params['per_page'] = self.options[:per_page] if (self.options.has_key?(:per_page) && method == :get)
       end
 
       if response.env[:response_headers].has_key?('x-ratelimit-limit')
