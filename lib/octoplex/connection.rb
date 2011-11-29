@@ -12,7 +12,6 @@ module Octoplex
       options ||= {}
 
       @options = {
-        :token => nil,
         :per_page => 100,
         :enable_caching => true,
         :logging => false
@@ -93,7 +92,9 @@ module Octoplex
         req.url(path)
         req.body = body unless body.nil?
         req.params['access_token'] = self.token if self.token.is_a?(String)
-        req.params['per_page'] = self.options[:per_page] if self.options.has_key?(:per_page)
+        if method == :get
+          req.params['per_page'] = self.options[:per_page] if self.options.has_key?(:per_page)
+        end
       end
 
       if response.env[:response_headers].has_key?('x-ratelimit-limit')
